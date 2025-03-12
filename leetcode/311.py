@@ -96,6 +96,57 @@ class Solution:
                 right -= 1
         return res
 
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
+        """
+        关于使用.sort()和sorted的一些：
+        两者几乎相同，但是后者接收的输入是任何可迭代对象，返回新列表
+        前者在原list上进行修改
+
+        在这个题目中，为什么使用sorted(nums)失效，因为返回的新list没有被作为nums利用。写成nums = sorted(nums)就可以了。
+        :param nums:
+        :return:
+        """
+        # nums = sorted(nums) # 任意可迭代对象
+        nums.sort() # 对list进行排序
+        res = []
+        n = len(nums)
+
+        k = 0 # k作为指标，通过它找另外两个
+
+        for k in range(n-2):
+            # print(f"k: {k}, range: {n-2}")
+
+            if nums[k] > 0: # 检查一：排序后是否第一个大于0，大于0则说明整个数组不存在 = 0的可能，结束循环
+                break
+            if k > 0 and nums[k - 1] == nums[k]: # 检查二：数组元素是否重复，重复的就不必再进行计算，快进到下一个k
+                continue
+            i = k + 1 # 右指针
+            j = n - 1 # 左指针
+
+            while i < j:
+                s = nums[k] + nums[i] + nums[j]
+                if s > 0:
+                    j -= 1
+                    while i < j and nums[j] == nums[j + 1]: # 去除重复的计算
+                        j -= 1
+                elif s < 0:
+                    i += 1
+                    while i < j and nums[i] == nums[i - 1]:
+                        i += 1
+                else:
+                    res.append([nums[k], nums[i], nums[j]]) # 如果得到0结果，就添加到数组中
+                    # 移动指针继续进行循环
+                    i += 1
+                    j -= 1
+                    while i < j and nums[j] == nums[j + 1]:
+                        j -= 1
+                    while i < j and nums[i] == nums[i - 1]:
+                        i += 1
+        return res
+
+
+
+
 
 if __name__ == '__main__':
 
