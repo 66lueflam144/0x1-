@@ -144,8 +144,40 @@ class Solution:
                         i += 1
         return res
 
+    def isValid(self, s: str) -> bool:
+        stack = list()
+        # 对字符串进行预处理，奇数长度一定为false
+        if len(s) % 2 == 1:
+            return False
 
+        # 建立一个字典，方便进行对比
+        pairs = {
+            ")": "(",
+            "}": "{",
+            "]": "["
+        }
 
+        # 关于为什么这样存储，和后续的stack有关
+
+        for i in s:
+            # 判断是否在上述key中，不在的话，加入stack中
+            if i in pairs:
+                # 目前是已经在上述key中，那么进行对前一个字符是否匹配的验证
+                if not stack or stack[-1] != pairs[i]:
+                    # 前一个是检查stack是否为空，出现的情景是输入为空的时候
+                    # 后一个就是对配对的检查，i作为key，stack[-1]作为栈顶字符也就是前一个字符
+                    return False
+                stack.pop()  # 该字符通过检查，就把栈顶抛弃
+            else:
+                stack.append(i)  # 没有就增加到栈顶
+        return not stack  # 只有通过检查才为空即False，没有通过检查为True
+
+    def findKthLargest(self, nums: list[int], k: int) -> int:
+        nums.sort()
+        n = len(nums)
+        i = n - k
+
+        return nums[i]
 
 
 if __name__ == '__main__':
@@ -160,4 +192,5 @@ if __name__ == '__main__':
     # nums = [9,1,4,7,3,-1,0,5,8,-1,6]
     # test_.longestConsecutive(nums)
 
-    a = [1, 2, 3]
+    s = "()[}"
+    test_.isValid(s)
