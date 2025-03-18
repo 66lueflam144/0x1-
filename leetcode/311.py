@@ -179,6 +179,66 @@ class Solution:
 
         return nums[i]
 
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        if not s:  # 合法性判断
+            return 0
+        left = 0  # 指着窗口左边的指针,淘汰预备
+        n = len(s)  # 输入的长度
+        window_ = set()  # 窗口存储的内容
+
+        max_len = 0  # 最大窗口长度
+        cur_len = 0  # 目前窗口长度，也用于控制窗口的移动
+
+        for i in range(n):  # 在字符长度内进行
+            cur_len += 1  # 目前窗口长度+1
+            while s[i] in window_:  # 如果在已存窗口内有该字符，即出现重复
+                window_.remove(s[left])  # 滑动窗口，也就是将存在窗口中的最左边字符移除
+                left += 1  # 将窗口左移
+                cur_len -= 1  # 目前的长度减小
+            max_len = max(max_len, cur_len)  # 选出当前最大长度
+            window_.add(s[i])  # 没有在窗口中则加入
+        return max_len
+
+    def findAnagrams(self, s: str, p: str) -> list[int]:
+
+        # 核心思想就是在字符范围内从左向右移动窗口
+        # 不再对比字符，而是对比出现次数。保存出现次数的数组与p的次数数组一致的时候，就出现异位词
+        n_s = len(s)
+        n_p = len(p)
+
+        if n_p > n_s:
+            return []
+        res = []
+        window_list = [0] * 26
+        p_list = [0] * 26
+
+        # 初始化
+        for i in p:
+            p_list[ord(i) - ord('a')] += 1
+
+        for j in range(n_p):
+            window_list[ord(s[j]) - ord('a')] += 1
+
+        # 如果初始化之后就相同，说明从0位置开始就存在target
+        if p_list == window_list:
+            res.append(0)
+
+        for x in range(n_p, n_s):
+            # 移动
+            # 对左边处理
+            left_char = s[x - n_p]
+            window_list[ord(left_char) - ord('a')] -= 1
+
+            # 对右边处理
+            right_char = s[x]
+            window_list[ord(right_char) - ord('a')] += 1
+
+            # 移动一次对比一次
+            if p_list == window_list:
+                res.append(x - n_p + 1)
+
+        return res
+
 
 if __name__ == '__main__':
 
