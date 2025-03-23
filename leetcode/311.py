@@ -239,6 +239,33 @@ class Solution:
 
         return res
 
+    # 这是一道推荐的类似题目，判断两个字符串是否异位词
+    def isAnagram(self, s: str, t: str) -> bool:
+
+        if len(s) != len(t):
+            return False
+
+        s_list = [0] * 26
+        p_list = [0] * 26
+
+        for i in s:
+            s_list[ord(i) - ord('a')] += 1
+        for j in t:
+            p_list[ord(j) - ord('a')] += 1
+        if s_list == p_list:
+            return True
+        else:
+            return False
+
+        # s_ = sorted(s)
+        # t_ = sorted(t)
+        #
+        # if s_ == t_:
+        #     return True
+        # else:
+        #     return False
+
+
 
 if __name__ == '__main__':
 
